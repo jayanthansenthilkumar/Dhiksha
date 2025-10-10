@@ -21,7 +21,6 @@ python app.py
 - 📊 **Dashboard**: http://localhost:8000/static/dashboard.html
 - 📚 **API Docs**: http://localhost:8000/docs
 
----
 
 ## 📁 Project Structure
 
