@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Learning Recommender - Dashboard</title>
+    <link rel="stylesheet" href="dashboard.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+    <!-- Sidebar Navigation -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h2>🎓 AI Recommender</h2>
+            <button class="sidebar-toggle" onclick="toggleSidebar()">☰</button>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="#" class="nav-item active" onclick="showTab('overview')">
+                <span class="icon">📊</span>
+                <span>Overview</span>
+            </a>
+            <a href="#" class="nav-item" onclick="showTab('recommendations')">
+                <span class="icon">🎯</span>
+                <span>Recommendations</span>
+            </a>
+            <a href="#" class="nav-item" onclick="showTab('users')">
+                <span class="icon">👥</span>
+                <span>Users</span>
+            </a>
+            <a href="#" class="nav-item" onclick="showTab('content')">
+                <span class="icon">📚</span>
+                <span>Content</span>
+            </a>
+            <a href="#" class="nav-item" onclick="showTab('events')">
+                <span class="icon">⚡</span>
+                <span>Live Events</span>
+            </a>
+            <a href="#" class="nav-item" onclick="showTab('analytics')">
+                <span class="icon">📈</span>
+                <span>Analytics</span>
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+            <div class="api-status" id="apiStatus">
+                <span class="status-dot"></span>
+                <span id="statusText">Connecting...</span>
+            </div>
+            <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <button class="mobile-menu-btn" onclick="toggleSidebar()">☰</button>
+                <h1 id="pageTitle">Dashboard Overview</h1>
+            </div>
+            <div class="header-right">
+                <div class="search-box">
+                    <input type="text" placeholder="Search users, content..." id="globalSearch">
+                    <span class="search-icon">🔍</span>
+                </div>
+                <div class="user-menu">
+                    <img src="https://ui-avatars.com/api/?name=Admin+User&background=4F46E5&color=fff" alt="User" class="user-avatar">
+                    <span>Admin</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Overview Tab -->
+        <div class="tab-content active" id="overviewTab">
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%)">👥</div>
+                    <div class="stat-info">
+                        <div class="stat-label">Total Users</div>
+                        <div class="stat-value" id="totalUsers">-</div>
+                        <div class="stat-change positive">+12% this week</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%)">📚</div>
+                    <div class="stat-info">
+                        <div class="stat-label">Content Items</div>
+                        <div class="stat-value" id="totalContent">-</div>
+                        <div class="stat-change positive">+5 new</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)">⚡</div>
+                    <div class="stat-info">
+                        <div class="stat-label">Total Events</div>
+                        <div class="stat-value" id="totalEvents">-</div>
+                        <div class="stat-change positive">+234 today</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)">🎯</div>
+                    <div class="stat-info">
+                        <div class="stat-label">Active Users (24h)</div>
+                        <div class="stat-value" id="activeUsers">-</div>
+                        <div class="stat-change negative">-3% vs yesterday</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Row -->
+            <div class="charts-grid">
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3>Event Distribution</h3>
+                        <select class="chart-filter" onchange="updateEventChart()">
+                            <option value="all">All Time</option>
+                            <option value="week">Last Week</option>
+                            <option value="month">Last Month</option>
+                        </select>
+                    </div>
+                    <canvas id="eventChart"></canvas>
+                </div>
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3>User Engagement Trend</h3>
+                        <div class="chart-legend">
+                            <span><span class="legend-dot" style="background: #4F46E5"></span> Views</span>
+                            <span><span class="legend-dot" style="background: #10B981"></span> Completions</span>
+                        </div>
+                    </div>
+                    <canvas id="engagementChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Popular Content & Recent Activity -->
+            <div class="content-grid">
+                <div class="content-card">
+                    <h3>🔥 Popular Content</h3>
+                    <div id="popularContent" class="popular-list"></div>
+                </div>
+                <div class="content-card">
+                    <h3>🕐 Recent Activity</h3>
+                    <div id="recentActivity" class="activity-feed"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recommendations Tab -->
+        <div class="tab-content" id="recommendationsTab">
+            <div class="rec-test-panel">
+                <h2>Test Recommendation Engine</h2>
+                <div class="rec-form">
+                    <div class="form-group">
+                        <label>User ID:</label>
+                        <input type="text" id="recUserId" placeholder="e.g., user_1" value="user_1">
+                    </div>
+                    <div class="form-group">
+                        <label>Strategy:</label>
+                        <select id="recStrategy">
+                            <option value="hybrid">Hybrid (Collaborative + Content)</option>
+                            <option value="collaborative">Collaborative Filtering</option>
+                            <option value="content_based">Content-Based</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Number of Recommendations:</label>
+                        <input type="number" id="recCount" min="1" max="50" value="10">
+                    </div>
+                    <button class="btn-primary" onclick="testRecommendations()">
+                        Generate Recommendations
+                    </button>
+                </div>
+            </div>
+
+            <div id="recommendationResults" class="rec-results"></div>
+        </div>
+
+        <!-- Users Tab -->
+        <div class="tab-content" id="usersTab">
+            <div class="table-header">
+                <h2>User Management</h2>
+                <div class="table-controls">
+                    <input type="text" placeholder="Search users..." id="userSearch" onkeyup="filterUsers()">
+                    <button class="btn-primary">+ Add User</button>
+                </div>
+            </div>
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>User ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Skill Level</th>
+                            <th>Interests</th>
+                            <th>Events</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usersTable"></tbody>
+                </table>
+            </div>
+            <div class="table-pagination">
+                <button onclick="prevUsersPage()">← Previous</button>
+                <span id="userPageInfo">Page 1</span>
+                <button onclick="nextUsersPage()">Next →</button>
+            </div>
+        </div>
+
+        <!-- Content Tab -->
+        <div class="tab-content" id="contentTab">
+            <div class="table-header">
+                <h2>Content Library</h2>
+                <div class="table-controls">
+                    <select id="contentFilter" onchange="filterContent()">
+                        <option value="">All Types</option>
+                        <option value="video">Videos</option>
+                        <option value="article">Articles</option>
+                        <option value="course">Courses</option>
+                        <option value="tutorial">Tutorials</option>
+                    </select>
+                    <input type="text" placeholder="Search content..." id="contentSearch" onkeyup="filterContent()">
+                    <button class="btn-primary">+ Add Content</button>
+                </div>
+            </div>
+            <div class="content-grid-view" id="contentGrid"></div>
+        </div>
+
+        <!-- Events Tab -->
+        <div class="tab-content" id="eventsTab">
+            <div class="live-header">
+                <h2>Live Event Stream</h2>
+                <div class="live-indicator">
+                    <span class="pulse-dot"></span>
+                    <span>LIVE</span>
+                </div>
+            </div>
+            <div class="event-stream" id="eventStream"></div>
+        </div>
+
+        <!-- Analytics Tab -->
+        <div class="tab-content" id="analyticsTab">
+            <div class="analytics-header">
+                <h2>Advanced Analytics</h2>
+                <div class="date-range-picker">
+                    <input type="date" id="startDate">
+                    <span>to</span>
+                    <input type="date" id="endDate">
+                    <button class="btn-secondary" onclick="applyDateFilter()">Apply</button>
+                </div>
+            </div>
+
+            <div class="analytics-grid">
+                <div class="chart-card wide">
+                    <h3>Content Performance Matrix</h3>
+                    <canvas id="performanceChart"></canvas>
+                </div>
+                <div class="chart-card">
+                    <h3>User Cohort Analysis</h3>
+                    <canvas id="cohortChart"></canvas>
+                </div>
+                <div class="chart-card">
+                    <h3>Recommendation Accuracy</h3>
+                    <canvas id="accuracyChart"></canvas>
+                </div>
+            </div>
+
+            <div class="insights-panel">
+                <h3>💡 AI Insights</h3>
+                <div id="aiInsights" class="insights-list"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="dashboard.js"></script>
+</body>
+</html>

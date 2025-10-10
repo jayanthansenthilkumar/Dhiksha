@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning Recommendations - AI-Powered</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <h1>📚 AI Learning Recommender</h1>
+                <p class="tagline">Personalized learning paths, powered by machine learning</p>
+            </div>
+            <div class="status" id="apiStatus">
+                <span class="status-indicator" id="statusDot"></span>
+                <span id="statusText">Checking API...</span>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- User Input Section -->
+            <section class="user-section">
+                <h2>Get Your Recommendations</h2>
+                <div class="input-group">
+                    <label for="userId">User ID:</label>
+                    <input 
+                        type="text" 
+                        id="userId" 
+                        placeholder="Enter user ID (e.g., user_123)" 
+                        value="user_123"
+                    >
+                </div>
+                <div class="input-group">
+                    <label for="numRecs">Number of Recommendations:</label>
+                    <input 
+                        type="number" 
+                        id="numRecs" 
+                        min="1" 
+                        max="20" 
+                        value="10"
+                    >
+                </div>
+                <button class="btn btn-primary" onclick="getRecommendations()">
+                    Get Recommendations
+                </button>
+            </section>
+
+            <!-- Loading Indicator -->
+            <div id="loading" class="loading" style="display: none;">
+                <div class="spinner"></div>
+                <p>Generating personalized recommendations...</p>
+            </div>
+
+            <!-- Recommendations Display -->
+            <section class="recommendations-section" id="recommendationsSection" style="display: none;">
+                <div class="section-header">
+                    <h2>Your Personalized Recommendations</h2>
+                    <div class="meta-info" id="metaInfo"></div>
+                </div>
+                <div id="recommendationsList" class="recommendations-grid"></div>
+            </section>
+
+            <!-- Event Logging Section -->
+            <section class="event-section">
+                <h2>Log User Activity</h2>
+                <div class="event-form">
+                    <div class="input-group">
+                        <label for="eventUserId">User ID:</label>
+                        <input type="text" id="eventUserId" placeholder="user_123" value="user_123">
+                    </div>
+                    <div class="input-group">
+                        <label for="eventContentId">Content ID:</label>
+                        <input type="text" id="eventContentId" placeholder="content_456" value="content_456">
+                    </div>
+                    <div class="input-group">
+                        <label for="eventType">Event Type:</label>
+                        <select id="eventType">
+                            <option value="view">View</option>
+                            <option value="complete">Complete</option>
+                            <option value="like">Like</option>
+                            <option value="quiz_score">Quiz Score</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="eventValue">Value (optional):</label>
+                        <input type="number" id="eventValue" placeholder="e.g., 85 for quiz score">
+                    </div>
+                    <button class="btn btn-secondary" onclick="logEvent()">
+                        Log Event
+                    </button>
+                </div>
+                <div id="eventResponse" class="event-response"></div>
+            </section>
+
+            <!-- System Stats -->
+            <section class="stats-section">
+                <h2>System Statistics</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">👥</div>
+                        <div class="stat-value" id="totalUsers">-</div>
+                        <div class="stat-label">Total Users</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">📖</div>
+                        <div class="stat-value" id="totalContent">-</div>
+                        <div class="stat-label">Content Items</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">⚡</div>
+                        <div class="stat-value" id="totalEvents">-</div>
+                        <div class="stat-label">Events Logged</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🤖</div>
+                        <div class="stat-value" id="modelVersion">v1.0.0</div>
+                        <div class="stat-label">Model Version</div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>AI-Powered Learning Recommendation System | <a href="http://localhost:8000/docs" target="_blank">API Docs</a> | <a href="http://localhost:5000" target="_blank">MLflow</a> | <a href="http://localhost:3000" target="_blank">Grafana</a></p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

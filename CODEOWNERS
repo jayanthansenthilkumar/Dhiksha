@@ -1,0 +1,34 @@
+# CODEOWNERS
+# Defines who reviews and owns different parts of the codebase
+
+# Global owners (fallback)
+* @platform-team
+
+# API & Backend
+/src/api/ @backend-team @platform-lead
+/src/data/ @backend-team
+/src/utils/ @platform-team
+
+# ML Models
+/src/models/ @ml-team @ml-lead
+/src/pipelines/ @ml-team @data-eng-team
+
+# Infrastructure
+/infra/ @sre-team @devops-team
+/docker-compose.yml @sre-team
+/Dockerfile @sre-team
+/.github/workflows/ @devops-team
+
+# Monitoring
+/monitoring/ @sre-team
+
+# Documentation
+/docs/ @platform-lead @tech-writer
+/README.md @platform-lead
+
+# Tests
+/tests/ @qa-team @backend-team
+
+# Security & Auth
+/src/utils/auth.py @security-team
+/src/utils/secrets.py @security-team
